@@ -3,7 +3,8 @@ import os
 text_input = os.getcwd() + '\\resources\\day1.txt'
 
 def parse_input() -> ([int], [int]):
-    a = [], b = []
+    a = []
+    b = []
 
     with open(text_input, 'r') as file:
         for line in file:
