@@ -11,22 +11,21 @@ do_instruction = "do()"
 
 # Puzzle one is finding each of the mul operations buried in each line of corrupted memory, then summing the result
 # of all those operations
-def puzzle_one():
-    return sum(int(m.group(1)) * int(m.group(2)) for m in re.finditer(mul_instruction, mem))
+def puzzle_one(str = mem):
+    return sum(int(m.group(1)) * int(m.group(2)) for m in re.finditer(mul_instruction, str))
 
 
 # Puzzle two is much like the first, except now there are 'do()' and 'don't()' instructions that either enable or
 # disable mul operations
 def puzzle_two():
-    len_dont = len(dont_instruction)
-    len_do = len(do_instruction)
     clean = mem
     while dont_instruction in clean:
         next_dont = clean.find(dont_instruction)
-        next_do = clean[next_dont + len_dont:].find(do_instruction)
-        clean = clean[:next_dont] if next_do == -1 else clean[:next_dont] + clean[next_dont + len_dont + next_do + len_do:]
+        next_do = clean[next_dont + len(dont_instruction):].find(do_instruction)
+        end = next_do if next_do == -1 else next_dont + len(dont_instruction) + next_do + len(do_instruction)
+        clean = clean[:next_dont] + clean[end:]
 
-    return sum(int(m.group(1)) * int(m.group(2)) for m in re.finditer(mul_instruction, clean))
+    return puzzle_one(clean)
 
 
 print(f"Puzzle one solution = {puzzle_one()}")
